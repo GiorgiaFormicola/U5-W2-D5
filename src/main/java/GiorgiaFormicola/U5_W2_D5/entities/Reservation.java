@@ -22,7 +22,7 @@ public class Reservation {
     @Setter(AccessLevel.NONE)
     private LocalDate requestDate;
 
-    @Column(columnDefinition = "text")
+    @Column(columnDefinition = "text", nullable = false)
     private String notes;
 
     @ManyToOne

@@ -64,5 +64,4 @@ public class TripsController {
         return this.tripsService.findByIdAndUpdateStatus(tripId);
     }
 
-
 }

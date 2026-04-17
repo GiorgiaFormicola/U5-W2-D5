@@ -54,7 +54,7 @@ public class ErrorsHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorDTO handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
-        return new ErrorDTO("Not valid date provided", LocalDateTime.now());
+        return new ErrorDTO("Not valid value provided", LocalDateTime.now());
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
