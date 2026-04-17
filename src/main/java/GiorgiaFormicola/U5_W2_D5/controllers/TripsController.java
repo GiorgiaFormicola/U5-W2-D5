@@ -34,9 +34,10 @@ public class TripsController {
     @GetMapping
     public Page<Trip> getTrips(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "date") String sortBy
     ) {
-        return this.tripsService.findAll(page, size);
+        return this.tripsService.findAll(page, size, sortBy);
     }
 
     @GetMapping("/{tripId}")

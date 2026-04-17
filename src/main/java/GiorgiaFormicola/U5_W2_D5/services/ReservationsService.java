@@ -9,6 +9,10 @@ import GiorgiaFormicola.U5_W2_D5.payloads.ReservationDTO;
 import GiorgiaFormicola.U5_W2_D5.repositories.ReservationsRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -32,6 +36,16 @@ public class ReservationsService {
         Reservation savedReservation = this.reservationsRepository.save(newReservation);
         log.info("Reservation with id " + savedReservation.getId() + " successfully saved!");
         return savedReservation;
+    }
+
+    public Page<Reservation> findAll(int page, int size, String sortBy) {
+        if (page < 0) page = 0;
+        if (size < 0 || size > 100) size = 5;
+        Pageable pageable;
+        if (sortBy.equals("trip.date") || sortBy.equals("requestDate"))
+            pageable = PageRequest.of(page, size, Sort.by(sortBy).reverse());
+        else pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        return this.reservationsRepository.findAll(pageable);
     }
 
 

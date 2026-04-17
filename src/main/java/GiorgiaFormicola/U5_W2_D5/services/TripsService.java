@@ -33,10 +33,12 @@ public class TripsService {
         return savedTrip;
     }
 
-    public Page<Trip> findAll(int page, int size) {
+    public Page<Trip> findAll(int page, int size, String sortBy) {
         if (page < 0) page = 0;
         if (size < 0 || size > 100) size = 5;
-        Pageable pageable = PageRequest.of(page, size, Sort.by("date").reverse());
+        Pageable pageable;
+        if (sortBy.equals("date")) pageable = PageRequest.of(page, size, Sort.by(sortBy).reverse());
+        else pageable = PageRequest.of(page, size, Sort.by(sortBy));
         return this.tripsRepository.findAll(pageable);
     }
 
