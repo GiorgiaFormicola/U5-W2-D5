@@ -59,5 +59,10 @@ public class TripsController {
         this.tripsService.findByIdAndDelete(tripId);
     }
 
+    @PatchMapping("/{tripId}/status")
+    public Trip getTripByIdAndUpdateStatus(@PathVariable UUID tripId) {
+        return this.tripsService.findByIdAndUpdateStatus(tripId);
+    }
+
 
 }

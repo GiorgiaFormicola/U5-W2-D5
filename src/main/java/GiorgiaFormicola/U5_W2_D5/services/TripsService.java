@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Slf4j
@@ -60,5 +61,15 @@ public class TripsService {
         Trip found = this.findById(tripId);
         //TODO:delete reservations linked to trip
         this.tripsRepository.delete(found);
+    }
+
+    public Trip findByIdAndUpdateStatus(UUID tripId) {
+        Trip found = this.findById(tripId);
+        if (found.getStatus().equals(TripStatus.COMPLETED)) throw new BadRequestException("Trip already completed");
+        if (found.getDate().isAfter(LocalDate.now()))
+            throw new BadRequestException("Trip scheduled on " + found.getDate());
+        found.setStatus(TripStatus.COMPLETED);
+        Trip updatedTrip = this.tripsRepository.save(found);
+        return updatedTrip;
     }
 }
