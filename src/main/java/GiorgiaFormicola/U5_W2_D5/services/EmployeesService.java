@@ -2,6 +2,7 @@ package GiorgiaFormicola.U5_W2_D5.services;
 
 import GiorgiaFormicola.U5_W2_D5.entities.Employee;
 import GiorgiaFormicola.U5_W2_D5.exceptions.BadRequestException;
+import GiorgiaFormicola.U5_W2_D5.exceptions.NotFoundException;
 import GiorgiaFormicola.U5_W2_D5.payloads.EmployeeDTO;
 import GiorgiaFormicola.U5_W2_D5.repositories.EmployeesRepository;
 import com.cloudinary.Cloudinary;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -37,4 +40,10 @@ public class EmployeesService {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
         return this.employeesRepository.findAll(pageable);
     }
+
+
+    public Employee findById(UUID employeeId) {
+        return this.employeesRepository.findById(employeeId).orElseThrow(() -> new NotFoundException("employee", employeeId));
+    }
+    
 }

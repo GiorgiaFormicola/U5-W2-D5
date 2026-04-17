@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("employees")
@@ -35,6 +36,11 @@ public class EmployeesController {
             @RequestParam(defaultValue = "5") int size,
             @RequestParam(defaultValue = "username") String sortBy) {
         return this.employeesService.findAll(page, size, sortBy);
+    }
+
+    @GetMapping("/{employeeId}")
+    public Employee getEmployeeById(@PathVariable UUID employeeId) {
+        return this.employeesService.findById(employeeId);
     }
 
 
