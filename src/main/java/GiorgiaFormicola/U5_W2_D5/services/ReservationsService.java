@@ -7,6 +7,7 @@ import GiorgiaFormicola.U5_W2_D5.enums.TripStatus;
 import GiorgiaFormicola.U5_W2_D5.exceptions.BadRequestException;
 import GiorgiaFormicola.U5_W2_D5.exceptions.NotFoundException;
 import GiorgiaFormicola.U5_W2_D5.payloads.ReservationDTO;
+import GiorgiaFormicola.U5_W2_D5.payloads.ReservationNotesDTO;
 import GiorgiaFormicola.U5_W2_D5.repositories.ReservationsRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,5 +56,54 @@ public class ReservationsService {
         return this.reservationsRepository.findById(reservationId).orElseThrow(() -> new NotFoundException("reservation", reservationId));
     }
 
+    /*public Reservation findByIdAndUpdate(UUID reservationId, ReservationDTO body) {
+        Reservation found = this.findById(reservationId);
+        Trip tripFound = tripsService.findById(body.tripId());
+        Employee employeeFound = employeesService.findById(body.employeeId());
+        if (!found.getTrip().getId().equals(body.tripId())) {
+            if (tripFound.getStatus().equals(TripStatus.COMPLETED))
+                throw new BadRequestException("Trip has already taken place on " + tripFound.getDate());
+            if (reservationsRepository.existsByTrip(tripFound))
+                throw new BadRequestException("Trip for " + tripFound.getDestination() + " on " + tripFound.getDate() + " already reserved by another employee");
+            if (reservationsRepository.existsByEmployeeAndTrip_Date(found.getEmployee(), tripFound.getDate()))
+                throw new BadRequestException("Employee has already a trip reserved on " + tripFound.getDate());
+        }
+        if (!found.getEmployee().getId().equals(body.employeeId())) {
+            if (reservationsRepository.existsByEmployeeAndTrip_Date(employeeFound, found.getTrip().getDate()))
+                throw new BadRequestException("Employee has already a trip reserved on " + found.getTrip().getDate());
+        }
+        found.setEmployee(employeeFound);
+        found.setTrip(tripFound);
+        found.setNotes(body.notes());
+        Reservation updatedReservation = this.reservationsRepository.save(found);
+        log.info("Reservation with id " + updatedReservation.getId() + " successfully modified");
+        return updatedReservation;
+    }*/
+
+    public Reservation findByIdAndUpdate(UUID reservationId, ReservationNotesDTO body) {
+        Reservation found = this.findById(reservationId);
+
+        /*if (!found.getTrip().getId().equals(body.tripId())) {
+            if (tripFound.getStatus().equals(TripStatus.COMPLETED))
+                throw new BadRequestException("Trip has already taken place on " + tripFound.getDate());
+            if (reservationsRepository.existsByTrip(tripFound))
+                throw new BadRequestException("Trip for " + tripFound.getDestination() + " on " + tripFound.getDate() + " already reserved by another employee");
+            if (reservationsRepository.existsByEmployeeAndTrip_Date(found.getEmployee(), tripFound.getDate()))
+                throw new BadRequestException("Employee has already a trip reserved on " + tripFound.getDate());
+        }
+        if (!found.getEmployee().getId().equals(body.employeeId())) {
+            if (reservationsRepository.existsByEmployeeAndTrip_Date(employeeFound, found.getTrip().getDate()))
+                throw new BadRequestException("Employee has already a trip reserved on " + found.getTrip().getDate());
+        }*/
+        /*found.setEmployee(employeeFound);
+        found.setTrip(tripFound);*/
+
+        if (found.getTrip().getStatus().equals(TripStatus.COMPLETED))
+            throw new BadRequestException("Trip has already taken place on " + found.getTrip().getDate());
+        found.setNotes(body.notes());
+        Reservation updatedReservation = this.reservationsRepository.save(found);
+        log.info("Reservation with id " + updatedReservation.getId() + " successfully modified");
+        return updatedReservation;
+    }
 
 }

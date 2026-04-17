@@ -3,6 +3,7 @@ package GiorgiaFormicola.U5_W2_D5.controllers;
 import GiorgiaFormicola.U5_W2_D5.entities.Reservation;
 import GiorgiaFormicola.U5_W2_D5.exceptions.PayloadValidationException;
 import GiorgiaFormicola.U5_W2_D5.payloads.ReservationDTO;
+import GiorgiaFormicola.U5_W2_D5.payloads.ReservationNotesDTO;
 import GiorgiaFormicola.U5_W2_D5.services.ReservationsService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -41,6 +42,15 @@ public class ReservationsController {
     @GetMapping("/{reservationId}")
     public Reservation getReservationById(@PathVariable UUID reservationId) {
         return this.reservationsService.findById(reservationId);
+    }
+
+    @PutMapping("/{reservationId}")
+    public Reservation getReservationByIdAndUpdate(@PathVariable UUID reservationId, @RequestBody @Validated ReservationNotesDTO body, BindingResult validationResult) {
+        if (validationResult.hasErrors()) {
+            List<String> errorsList = validationResult.getAllErrors().stream().map(error -> error.getDefaultMessage()).toList();
+            throw new PayloadValidationException(errorsList);
+        }
+        return this.reservationsService.findByIdAndUpdate(reservationId, body);
     }
 
 
