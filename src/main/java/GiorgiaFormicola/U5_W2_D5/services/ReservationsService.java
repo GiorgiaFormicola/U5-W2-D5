@@ -106,4 +106,9 @@ public class ReservationsService {
         return updatedReservation;
     }
 
+    public void findByIdAndDelete(UUID reservationId) {
+        Reservation found = this.findById(reservationId);
+        this.reservationsRepository.delete(found);
+    }
+
 }

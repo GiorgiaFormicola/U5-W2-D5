@@ -53,5 +53,11 @@ public class ReservationsController {
         return this.reservationsService.findByIdAndUpdate(reservationId, body);
     }
 
+    @DeleteMapping("/{reservationId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void getReservationByIdAndDelete(@PathVariable UUID reservationId) {
+        this.reservationsService.findByIdAndDelete(reservationId);
+    }
+
 
 }
