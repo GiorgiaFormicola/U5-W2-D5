@@ -5,6 +5,7 @@ import GiorgiaFormicola.U5_W2_D5.entities.Reservation;
 import GiorgiaFormicola.U5_W2_D5.entities.Trip;
 import GiorgiaFormicola.U5_W2_D5.enums.TripStatus;
 import GiorgiaFormicola.U5_W2_D5.exceptions.BadRequestException;
+import GiorgiaFormicola.U5_W2_D5.exceptions.NotFoundException;
 import GiorgiaFormicola.U5_W2_D5.payloads.ReservationDTO;
 import GiorgiaFormicola.U5_W2_D5.repositories.ReservationsRepository;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -46,6 +49,10 @@ public class ReservationsService {
             pageable = PageRequest.of(page, size, Sort.by(sortBy).reverse());
         else pageable = PageRequest.of(page, size, Sort.by(sortBy));
         return this.reservationsRepository.findAll(pageable);
+    }
+
+    public Reservation findById(UUID reservationId) {
+        return this.reservationsRepository.findById(reservationId).orElseThrow(() -> new NotFoundException("reservation", reservationId));
     }
 
 

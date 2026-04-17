@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("reservations")
@@ -35,6 +36,11 @@ public class ReservationsController {
             @RequestParam(defaultValue = "5") int size,
             @RequestParam(defaultValue = "trip.date") String sortBy) {
         return this.reservationsService.findAll(page, size, sortBy);
+    }
+
+    @GetMapping("/{reservationId}")
+    public Reservation getReservationById(@PathVariable UUID reservationId) {
+        return this.reservationsService.findById(reservationId);
     }
 
 
