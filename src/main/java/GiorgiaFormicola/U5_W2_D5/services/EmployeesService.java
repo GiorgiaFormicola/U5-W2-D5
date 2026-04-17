@@ -45,5 +45,24 @@ public class EmployeesService {
     public Employee findById(UUID employeeId) {
         return this.employeesRepository.findById(employeeId).orElseThrow(() -> new NotFoundException("employee", employeeId));
     }
-    
+
+    public Employee findByIdAndUpdate(UUID employeeId, EmployeeDTO body) {
+        Employee found = this.findById(employeeId);
+        if (!found.getEmail().equals(body.email())) {
+            if (this.employeesRepository.existsByEmail(body.email()))
+                throw new BadRequestException("Email " + body.email() + " already in use!");
+        }
+        if (!found.getUsername().equals(body.username())) {
+            if (employeesRepository.existsByUsername(body.username()))
+                throw new BadRequestException("Username " + body.username() + " already in use!");
+        }
+        found.setUsername(body.username());
+        found.setName(body.name());
+        found.setSurname(body.surname());
+        found.setEmail(body.email());
+        found.setProfilePictureURL("https://ui-avatars.com/api/?name=" + body.name() + "+" + body.surname());
+        Employee updatedEmployee = this.employeesRepository.save(found);
+        log.info("Employee with id " + updatedEmployee.getId() + " successfully modified");
+        return updatedEmployee;
+    }
 }
