@@ -52,5 +52,11 @@ public class EmployeesController {
         return this.employeesService.findByIdAndUpdate(employeeId, body);
     }
 
+    @DeleteMapping("/{employeeId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void getEmployeeByIdAndDelete(@PathVariable UUID employeeId) {
+        this.employeesService.findByIdAndDelete(employeeId);
+    }
+
 
 }

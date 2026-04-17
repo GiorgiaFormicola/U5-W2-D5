@@ -65,4 +65,11 @@ public class EmployeesService {
         log.info("Employee with id " + updatedEmployee.getId() + " successfully modified");
         return updatedEmployee;
     }
+
+
+    public void findByIdAndDelete(UUID employeeId) {
+        Employee found = this.findById(employeeId);
+        //TODO:delete reservations linked to employee
+        this.employeesRepository.delete(found);
+    }
 }
