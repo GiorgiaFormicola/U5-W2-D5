@@ -3,7 +3,6 @@ package GiorgiaFormicola.U5_W2_D5.entities;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.UUID;
@@ -12,7 +11,7 @@ import java.util.UUID;
 @Table(name = "employees")
 @Getter
 @Setter
-@NoArgsConstructor
+
 public class Employee {
     @Id
     @GeneratedValue
@@ -33,6 +32,9 @@ public class Employee {
 
     @Column(name = "profile_picture_url", nullable = false)
     private String profilePictureURL;
+
+    protected Employee() {
+    }
 
     public Employee(String username, String name, String surname, String email) {
         this.username = username;

@@ -3,7 +3,6 @@ package GiorgiaFormicola.U5_W2_D5.entities;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -13,7 +12,6 @@ import java.util.UUID;
 @Table(name = "reservations")
 @Getter
 @Setter
-@NoArgsConstructor
 public class Reservation {
     @Id
     @GeneratedValue
@@ -34,6 +32,9 @@ public class Reservation {
     @OneToOne
     @JoinColumn(name = "trip_id", nullable = false, unique = true)
     private Trip trip;
+
+    protected Reservation() {
+    }
 
     public Reservation(String notes, Employee employee, Trip trip) {
         this.requestDate = LocalDate.now();

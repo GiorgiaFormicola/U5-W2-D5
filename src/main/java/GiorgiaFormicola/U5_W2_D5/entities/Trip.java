@@ -4,7 +4,6 @@ import GiorgiaFormicola.U5_W2_D5.enums.TripStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -14,7 +13,6 @@ import java.util.UUID;
 @Table(name = "trips", uniqueConstraints = {@UniqueConstraint(columnNames = {"destination", "date"})})
 @Getter
 @Setter
-@NoArgsConstructor
 public class Trip {
     @Id
     @GeneratedValue
@@ -30,6 +28,9 @@ public class Trip {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private TripStatus status;
+
+    protected Trip() {
+    }
 
     public Trip(String destination, LocalDate date) {
         this.destination = destination;
