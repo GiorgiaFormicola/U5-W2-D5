@@ -55,4 +55,10 @@ public class TripsService {
         log.info("Trip with id " + updatedTrip.getId() + " successfully modified");
         return updatedTrip;
     }
+
+    public void findByIdAndDelete(UUID tripId) {
+        Trip found = this.findById(tripId);
+        //TODO:delete reservations linked to trip
+        this.tripsRepository.delete(found);
+    }
 }

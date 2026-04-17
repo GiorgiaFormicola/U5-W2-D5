@@ -53,5 +53,11 @@ public class TripsController {
         return this.tripsService.findByIdAndUpdate(tripId, body);
     }
 
+    @DeleteMapping("/{tripId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void getTripByIdAndDelete(@PathVariable UUID tripId) {
+        this.tripsService.findByIdAndDelete(tripId);
+    }
+
 
 }
