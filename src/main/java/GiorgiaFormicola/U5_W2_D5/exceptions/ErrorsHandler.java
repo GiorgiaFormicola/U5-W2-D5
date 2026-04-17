@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.time.LocalDateTime;
 
@@ -31,6 +32,12 @@ public class ErrorsHandler {
         return new ErrorDTO(ex.getMessage(), LocalDateTime.now());
     }
 
+    @ExceptionHandler(ValidationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDTO handleValidationException(ValidationException ex) {
+        return new ErrorDTO(ex.getMessage(), LocalDateTime.now());
+    }
+
     @ExceptionHandler(PropertyReferenceException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorDTO handlePropertyReferenceException(PropertyReferenceException ex) {
@@ -42,4 +49,17 @@ public class ErrorsHandler {
     public ErrorDTO handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
         return new ErrorDTO("Not valid ID provided", LocalDateTime.now());
     }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDTO handleMaxUploadSizeExceededException(MaxUploadSizeExceededException ex) {
+        return new ErrorDTO("The uploaded file can't be bigger than 5 MB", LocalDateTime.now());
+    }
+
+    /*@ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorDTO handleGenericException(Exception ex) {
+        ex.printStackTrace();
+        return new ErrorDTO("Oops, a server error occurred!", LocalDateTime.now());
+    }*/
 }

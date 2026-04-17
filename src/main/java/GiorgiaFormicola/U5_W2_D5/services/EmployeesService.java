@@ -3,9 +3,11 @@ package GiorgiaFormicola.U5_W2_D5.services;
 import GiorgiaFormicola.U5_W2_D5.entities.Employee;
 import GiorgiaFormicola.U5_W2_D5.exceptions.BadRequestException;
 import GiorgiaFormicola.U5_W2_D5.exceptions.NotFoundException;
+import GiorgiaFormicola.U5_W2_D5.exceptions.ValidationException;
 import GiorgiaFormicola.U5_W2_D5.payloads.EmployeeDTO;
 import GiorgiaFormicola.U5_W2_D5.repositories.EmployeesRepository;
 import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -13,7 +15,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
@@ -71,5 +76,21 @@ public class EmployeesService {
         Employee found = this.findById(employeeId);
         //TODO:delete reservations linked to employee
         this.employeesRepository.delete(found);
+    }
+
+    public Employee findByIdAndUploadProfilePicture(UUID employeeId, MultipartFile file) {
+        if (file.getContentType() == null || !file.getContentType().startsWith("image/") || file.isEmpty())
+            throw new ValidationException("Invalid type of file provided");
+        if (file.getSize() > 2 * 1024 * 1024)
+            throw new ValidationException("File size must be smaller than 2 MB");
+        Employee found = findById(employeeId);
+        try {
+            Map result = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+            found.setProfilePictureURL((String) result.get("secure_url"));
+            Employee updatedEmployee = this.employeesRepository.save(found);
+            return updatedEmployee;
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }
