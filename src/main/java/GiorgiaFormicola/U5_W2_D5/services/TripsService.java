@@ -2,6 +2,7 @@ package GiorgiaFormicola.U5_W2_D5.services;
 
 import GiorgiaFormicola.U5_W2_D5.entities.Trip;
 import GiorgiaFormicola.U5_W2_D5.exceptions.BadRequestException;
+import GiorgiaFormicola.U5_W2_D5.exceptions.NotFoundException;
 import GiorgiaFormicola.U5_W2_D5.payloads.TripDTO;
 import GiorgiaFormicola.U5_W2_D5.repositories.TripsRepository;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -32,5 +35,9 @@ public class TripsService {
         if (size < 0 || size > 100) size = 5;
         Pageable pageable = PageRequest.of(page, size, Sort.by("date").reverse());
         return this.tripsRepository.findAll(pageable);
+    }
+
+    public Trip findById(UUID tripId) {
+        return this.tripsRepository.findById(tripId).orElseThrow(() -> new NotFoundException("trip", tripId));
     }
 }
