@@ -2,6 +2,7 @@ package GiorgiaFormicola.U5_W2_D5.exceptions;
 
 import GiorgiaFormicola.U5_W2_D5.payloads.ErrorDTO;
 import GiorgiaFormicola.U5_W2_D5.payloads.ErrorsListDTO;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.core.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -63,10 +64,16 @@ public class ErrorsHandler {
         return new ErrorDTO("File size to big to upload", LocalDateTime.now());
     }
 
-    /*@ExceptionHandler(Exception.class)
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDTO handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        return new ErrorDTO("Deletion of the desired resource avoided", LocalDateTime.now());
+    }
+
+    @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorDTO handleGenericException(Exception ex) {
         ex.printStackTrace();
         return new ErrorDTO("Oops, a server error occurred!", LocalDateTime.now());
-    }*/
+    }
 }
