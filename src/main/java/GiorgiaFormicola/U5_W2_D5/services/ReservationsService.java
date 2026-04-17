@@ -82,22 +82,6 @@ public class ReservationsService {
 
     public Reservation findByIdAndUpdate(UUID reservationId, ReservationNotesDTO body) {
         Reservation found = this.findById(reservationId);
-
-        /*if (!found.getTrip().getId().equals(body.tripId())) {
-            if (tripFound.getStatus().equals(TripStatus.COMPLETED))
-                throw new BadRequestException("Trip has already taken place on " + tripFound.getDate());
-            if (reservationsRepository.existsByTrip(tripFound))
-                throw new BadRequestException("Trip for " + tripFound.getDestination() + " on " + tripFound.getDate() + " already reserved by another employee");
-            if (reservationsRepository.existsByEmployeeAndTrip_Date(found.getEmployee(), tripFound.getDate()))
-                throw new BadRequestException("Employee has already a trip reserved on " + tripFound.getDate());
-        }
-        if (!found.getEmployee().getId().equals(body.employeeId())) {
-            if (reservationsRepository.existsByEmployeeAndTrip_Date(employeeFound, found.getTrip().getDate()))
-                throw new BadRequestException("Employee has already a trip reserved on " + found.getTrip().getDate());
-        }*/
-        /*found.setEmployee(employeeFound);
-        found.setTrip(tripFound);*/
-
         if (found.getTrip().getStatus().equals(TripStatus.COMPLETED))
             throw new BadRequestException("Trip has already taken place on " + found.getTrip().getDate());
         found.setNotes(body.notes());
