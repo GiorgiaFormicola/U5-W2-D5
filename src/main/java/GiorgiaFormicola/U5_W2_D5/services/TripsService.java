@@ -1,9 +1,11 @@
 package GiorgiaFormicola.U5_W2_D5.services;
 
 import GiorgiaFormicola.U5_W2_D5.entities.Trip;
+import GiorgiaFormicola.U5_W2_D5.enums.TripStatus;
 import GiorgiaFormicola.U5_W2_D5.exceptions.BadRequestException;
 import GiorgiaFormicola.U5_W2_D5.exceptions.NotFoundException;
 import GiorgiaFormicola.U5_W2_D5.payloads.TripDTO;
+import GiorgiaFormicola.U5_W2_D5.payloads.TripDateDTO;
 import GiorgiaFormicola.U5_W2_D5.repositories.TripsRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,5 +41,18 @@ public class TripsService {
 
     public Trip findById(UUID tripId) {
         return this.tripsRepository.findById(tripId).orElseThrow(() -> new NotFoundException("trip", tripId));
+    }
+
+    public Trip findByIdAndUpdate(UUID tripId, TripDateDTO body) {
+        Trip found = this.findById(tripId);
+        if (found.getStatus().equals(TripStatus.COMPLETED)) throw new BadRequestException("Trip already completed");
+        if (!found.getDate().equals(body.date())) {
+            if (tripsRepository.existsByDestinationAndDate(found.getDestination(), body.date()))
+                throw new BadRequestException("Trip for " + found.getDestination() + " on date " + body.date() + " already planned!");
+        }
+        found.setDate(body.date());
+        Trip updatedTrip = this.tripsRepository.save(found);
+        log.info("Trip with id " + updatedTrip.getId() + " successfully modified");
+        return updatedTrip;
     }
 }
