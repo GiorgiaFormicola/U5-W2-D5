@@ -2,6 +2,7 @@ package GiorgiaFormicola.U5_W2_D5.exceptions;
 
 import GiorgiaFormicola.U5_W2_D5.payloads.ErrorDTO;
 import GiorgiaFormicola.U5_W2_D5.payloads.ErrorsListDTO;
+import org.springframework.data.core.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -21,5 +22,11 @@ public class ErrorsHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorsListDTO handlePayloadValidationException(PayloadValidationException ex) {
         return new ErrorsListDTO(ex.getMessage(), LocalDateTime.now(), ex.getErrors());
+    }
+
+    @ExceptionHandler(PropertyReferenceException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDTO handlePropertyReferenceException(PropertyReferenceException ex) {
+        return new ErrorDTO("Not valid search param", LocalDateTime.now());
     }
 }
