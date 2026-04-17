@@ -53,7 +53,7 @@ public class ErrorsHandler {
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorDTO handleMaxUploadSizeExceededException(MaxUploadSizeExceededException ex) {
-        return new ErrorDTO("The uploaded file can't be bigger than 5 MB", LocalDateTime.now());
+        return new ErrorDTO("File size to big to upload", LocalDateTime.now());
     }
 
     /*@ExceptionHandler(Exception.class)
